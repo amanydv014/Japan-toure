@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kyoto — A Traveller's Guide</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo:   #1A1A2E;
+      --paper:    #F5F0E8;
+      --sakura:   #D4737A;
+      --moss:     #4A7C59;
+      --gold:     #C9963A;
+      --ink:      #3D3D3D;
+      --mist:     #E8E3D8;
+      --pale:     #FAF7F2;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--pale);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 52px;
+      transition: background 0.35s, box-shadow 0.35s;
+    }
+    nav.scrolled {
+      background: rgba(245,240,232,0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 1px 0 rgba(61,61,61,0.1);
+    }
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      text-decoration: none;
+    }
+    .nav-brand-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 18px;
+      color: var(--indigo);
+      font-weight: 700;
+    }
+    .nav-brand-en {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-decoration: none;
+      opacity: 0.65;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-pill {
+      background: var(--indigo);
+      color: var(--paper) !important;
+      opacity: 1 !important;
+      padding: 9px 20px;
+      border-radius: 2px;
+      font-size: 12px !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      background:
+        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1800&q=85') center/cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(26,26,46,0.15) 0%,
+        rgba(26,26,46,0.55) 55%,
+        rgba(26,26,46,0.88) 100%
+      );
+    }
+    .hero-kanji { display: none; }
+    .hero-content {
+      position: relative;
+      padding: 0 52px 80px;
+      max-width: 760px;
+    }
+    .hero-season {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 20px;
+    }
+    .hero-season::before {
+      content: '';
+      display: block;
+      width: 28px; height: 1px;
+      background: var(--gold);
+    }
+    .hero-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(52px, 7.5vw, 110px);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--paper);
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+    .hero-title strong {
+      font-weight: 700;
+      display: block;
+    }
+    .hero-desc {
+      font-size: 17px;
+      color: rgba(245,240,232,0.75);
+      max-width: 440px;
+      font-weight: 300;
+      line-height: 1.75;
+      margin-bottom: 40px;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-hero-primary {
+      background: var(--gold);
+      color: var(--indigo);
+      padding: 15px 34px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-hero-primary:hover { background: #b5821f; transform: translateY(-1px); }
+    .btn-hero-ghost {
+      border: 1px solid rgba(245,240,232,0.4);
+      color: var(--paper);
+      padding: 15px 34px;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: border-color 0.2s;
+    }
+    .btn-hero-ghost:hover { border-color: rgba(245,240,232,0.8); }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      right: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.45);
+      font-weight: 500;
+    }
+    .scroll-line {
+      width: 40px; height: 1px;
+      background: rgba(245,240,232,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: var(--gold);
+      animation: slide 2s ease-in-out infinite;
+    }
+    @keyframes slide { to { left: 100%; } }
+
+    /* ── QUICK FACTS ── */
+    .quick-facts {
+      background: var(--indigo);
+      padding: 32px 52px;
+      display: flex;
+      gap: 0;
+    }
+    .fact {
+      flex: 1;
+      border-right: 1px solid rgba(245,240,232,0.1);
+      padding: 0 32px;
+      display: flex;
+      flex-direction: column;
+    }
+    .fact:first-child { padding-left: 0; }
+    .fact:last-child { border-right: none; }
+    .fact-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .fact-value {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 22px;
+      color: var(--paper);
+      font-weight: 300;
+    }
+    .fact-note { font-size: 12px; color: rgba(245,240,232,0.4); margin-top: 2px; font-weight: 300; }
+
+    /* ── SECTION STRUCTURE ── */
+    .section-wrap { padding: 100px 52px; max-width: 1280px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .section-heading {
+      font-family: 'Noto Serif JP', serif;
+      font-size: clamp(30px, 4vw, 52px);
+      font-weight: 300;
+      color: var(--indigo);
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .section-heading strong { font-weight: 700; }
+    .section-lead {
+      font-size: 16px;
+      color: #666;
+      max-width: 520px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ── CATEGORY PILLS ── */
+    .pill {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .pill-temple { background: rgba(201,150,58,0.12); color: var(--gold); }
+    .pill-food   { background: rgba(212,115,122,0.12); color: var(--sakura); }
+    .pill-nature { background: rgba(74,124,89,0.12);  color: var(--moss); }
+    .pill-art    { background: rgba(26,26,46,0.1);    color: var(--indigo); }
+    .pill-stay   { background: rgba(61,61,61,0.08);   color: var(--ink); }
+
+    /* ── ITINERARY TABS (SIGNATURE) ── */
+    .itinerary-section { background: var(--indigo); padding: 0; }
+    .itinerary-wrap { max-width: 1280px; margin: 0 auto; padding: 80px 52px; }
+    .itinerary-header { margin-bottom: 48px; }
+    .itinerary-header .eyebrow { color: var(--gold); }
+    .itinerary-header .section-heading { color: var(--paper); }
+    .itinerary-header .section-lead { color: rgba(245,240,232,0.55); }
+
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 48px;
+      border-bottom: 1px solid rgba(245,240,232,0.1);
+      padding-bottom: 0;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: rgba(245,240,232,0.4);
+      font-family: 'Noto Serif JP', serif;
+      font-size: 15px;
+      font-weight: 300;
+      padding: 14px 28px 16px;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+      letter-spacing: 0.04em;
+    }
+    .tab-btn.active { color: var(--paper); }
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+    .tab-btn:hover { color: var(--paper); }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+
+    .itinerary-stop {
+      background: rgba(245,240,232,0.04);
+      padding: 32px 36px;
+      display: flex;
+      gap: 22px;
+      transition: background 0.2s;
+    }
+    .itinerary-stop:hover { background: rgba(245,240,232,0.08); }
+    .stop-time {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      color: var(--gold);
+      white-space: nowrap;
+      padding-top: 3px;
+      min-width: 56px;
+      font-weight: 400;
+    }
+    .stop-body {}
+    .stop-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 18px;
+      color: var(--paper);
+      font-weight: 400;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .stop-desc {
+      font-size: 13px;
+      color: rgba(245,240,232,0.5);
+      font-weight: 300;
+      line-height: 1.65;
+      margin-bottom: 10px;
+    }
+
+    /* ── NEIGHBORHOODS ── */
+    .neighborhoods-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .hood-card {
+      background: #fff;
+      overflow: hidden;
+      border-radius: 2px;
+      box-shadow: 0 2px 16px rgba(26,26,46,0.06);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .hood-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(26,26,46,0.12);
+    }
+    .hood-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+    .hood-body { padding: 24px 26px 28px; }
+    .hood-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--indigo);
+      margin-bottom: 4px;
+    }
+    .hood-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .hood-desc { font-size: 14px; color: #666; font-weight: 300; line-height: 1.7; margin-bottom: 16px; }
+    .hood-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ── MUST-EAT ── */
+    .eats-section { background: var(--mist); }
+    .eats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+    }
+    .eat-card {
+      background: var(--pale);
+      padding: 36px;
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .eat-emoji { font-size: 36px; flex-shrink: 0; line-height: 1; }
+    .eat-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--indigo);
+      margin-bottom: 4px;
+    }
+    .eat-jp { font-size: 12px; color: var(--gold); margin-bottom: 10px; font-weight: 300; }
+    .eat-desc { font-size: 14px; color: #666; font-weight: 300; line-height: 1.7; margin-bottom: 14px; }
+    .eat-where { font-size: 12px; color: var(--moss); font-weight: 500; }
+    .eat-where span { font-weight: 300; color: #888; }
+
+    /* ── PRACTICAL ── */
+    .practical-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .practical-card {
+      border: 1px solid var(--mist);
+      background: #fff;
+      padding: 28px 24px;
+      border-radius: 2px;
+    }
+    .practical-icon { font-size: 28px; margin-bottom: 14px; }
+    .practical-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--indigo);
+      margin-bottom: 10px;
+    }
+    .practical-text { font-size: 13px; color: #777; font-weight: 300; line-height: 1.7; }
+    .practical-text strong { color: var(--ink); font-weight: 500; }
+
+    /* ── PHOTO MOSAIC ── */
+    .mosaic {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 280px 280px;
+      gap: 4px;
+      margin-top: 64px;
+    }
+    .mosaic-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .mosaic-item:first-child { grid-row: 1 / 3; }
+    .mosaic-item { overflow: hidden; }
+    .mosaic-item img { transition: transform 0.5s ease; }
+    .mosaic-item:hover img { transform: scale(1.04); }
+
+    /* ── NEWSLETTER ── */
+    .newsletter {
+      background: var(--paper);
+      border-top: 1px solid var(--mist);
+      padding: 80px 52px;
+      text-align: center;
+    }
+    .newsletter .section-heading { margin-bottom: 14px; }
+    .newsletter p { color: #777; font-size: 16px; font-weight: 300; max-width: 400px; margin: 0 auto 36px; }
+    .nl-form { display: flex; gap: 0; max-width: 440px; margin: 0 auto; }
+    .nl-input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1px solid #ccc;
+      border-right: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      background: #fff;
+      color: var(--ink);
+      border-radius: 0;
+    }
+    .nl-input:focus { border-color: var(--gold); }
+    .nl-btn {
+      background: var(--indigo);
+      color: var(--paper);
+      border: none;
+      padding: 14px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+    .nl-btn:hover { background: #2c2c50; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--indigo);
+      padding: 52px 52px 28px;
+    }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(245,240,232,0.08);
+      flex-wrap: wrap;
+    }
+    .footer-brand-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 24px;
+      color: var(--paper);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .footer-brand-en {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+    .footer-tagline { font-size: 13px; color: rgba(245,240,232,0.4); font-weight: 300; max-width: 220px; line-height: 1.7; }
+    .footer-col h4 {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: 13px; color: rgba(245,240,232,0.45); text-decoration: none; font-weight: 300; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--paper); }
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 28px auto 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: rgba(245,240,232,0.25);
+      font-weight: 300;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .hero-content { padding: 0 24px 64px; }
+      .quick-facts { flex-wrap: wrap; padding: 24px; gap: 16px; }
+      .fact { border-right: none; padding: 0; flex-basis: 45%; }
+      .section-wrap { padding: 72px 24px; }
+      .itinerary-wrap { padding: 64px 24px; }
+      .neighborhoods-grid { grid-template-columns: 1fr; }
+      .eats-grid { grid-template-columns: 1fr; }
+      .practical-grid { grid-template-columns: 1fr 1fr; }
+      .tab-content.active { grid-template-columns: 1fr; }
+      .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .mosaic-item:first-child { grid-row: auto; grid-column: 1 / 3; }
+      .nl-form { flex-direction: column; }
+      .nl-input { border-right: 1px solid #ccc; border-bottom: none; }
+      footer { padding: 40px 24px 20px; }
+      .footer-inner { gap: 32px; }
+      .newsletter { padding: 60px 24px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-brand">
+    <span class="nav-brand-jp">Kyoto</span>
+    <span class="nav-brand-en">Traveller's Guide</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#neighborhoods">Neighborhoods</a></li>
+    <li><a href="#itinerary">Itinerary</a></li>
+    <li><a href="#food">Food</a></li>
+    <li><a href="#practical">Plan Your Trip</a></li>
+    <li><a href="#practical" class="nav-pill">Travel Tips</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-kanji"></div>
+  <div class="hero-content">
+    <p class="hero-season">Autumn · Spring · Winter · Summer</p>
+    <h1 class="hero-title">
+      Ancient<br/>
+      <strong>Kyoto</strong>
+    </h1>
+    <p class="hero-desc">Seventeen UNESCO World Heritage Sites, 1,600 Buddhist temples, and a street-food culture you'll think about for years. Here's how to find the real city.</p>
+    <div class="hero-actions">
+      <a href="#itinerary" class="btn-hero-primary">View 3-Day Itinerary</a>
+      <a href="#neighborhoods" class="btn-hero-ghost">Explore Neighborhoods</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- QUICK FACTS -->
+<div class="quick-facts">
+  <div class="fact">
+    <span class="fact-label">Best Time to Visit</span>
+    <span class="fact-value">Mar–May · Oct–Nov</span>
+    <span class="fact-note">Cherry blossom & autumn foliage</span>
+  </div>
+  <div class="fact">
+    <span class="fact-label">Currency</span>
+    <span class="fact-value">Japanese Yen ¥</span>
+    <span class="fact-note">Cash still preferred at many spots</span>
+  </div>
+  <div class="fact">
+    <span class="fact-label">Getting There</span>
+    <span class="fact-value">75 min from Osaka</span>
+    <span class="fact-note">Shinkansen from Tokyo ~2h 15m</span>
+  </div>
+  <div class="fact">
+    <span class="fact-label">Language</span>
+    <span class="fact-value">Japanese</span>
+    <span class="fact-note">Basic English in tourist areas</span>
+  </div>
+  <div class="fact">
+    <span class="fact-label">Time Zone</span>
+    <span class="fact-value">JST (UTC+9)</span>
+    <span class="fact-note">No daylight saving time</span>
+  </div>
+</div>
+
+<!-- NEIGHBORHOODS -->
+<section id="neighborhoods">
+  <div class="section-wrap">
+    <p class="eyebrow">Where to wander</p>
+    <h2 class="section-heading">Kyoto's<br/><strong>Neighborhoods</strong></h2>
+    <p class="section-lead">Each district carries its own mood. A morning in Gion is nothing like an evening in Fushimi — knowing which to visit when changes everything.</p>
+
+    <div class="neighborhoods-grid">
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=700&q=80" alt="Gion district" />
+        <div class="hood-body">
+          <div class="hood-name">Gion</div>
+          <div class="hood-jp">The Geisha Quarter</div>
+          <p class="hood-desc">Kyoto's most storied neighbourhood. Wooden machiya townhouses line Hanamikoji-dori, and geiko still walk the lanes in the early evening. Go at dusk.</p>
+          <div class="hood-tags">
+            <span class="pill pill-art">Culture</span>
+            <span class="pill pill-food">Nightlife</span>
+            <span class="pill pill-temple">Heritage</span>
+          </div>
+        </div>
+      </div>
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=700&q=80" alt="Arashiyama bamboo" />
+        <div class="hood-body">
+          <div class="hood-name">Arashiyama</div>
+          <div class="hood-jp">The Bamboo Hills</div>
+          <p class="hood-desc">Bamboo groves, a monkey park, and the Tenryu-ji garden on the river's edge. Arrive at 7am before the crowds arrive — it's a different world.</p>
+          <div class="hood-tags">
+            <span class="pill pill-nature">Nature</span>
+            <span class="pill pill-temple">Temples</span>
+          </div>
+        </div>
+      </div>
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1551801841-ecad875a5142?w=700&q=80" alt="Fushimi Inari" />
+        <div class="hood-body">
+          <div class="hood-name">Fushimi</div>
+          <div class="hood-jp">Gates & Sake District</div>
+          <p class="hood-desc">Home to the 10,000 vermillion torii gates of Fushimi Inari and Kyoto's sake-brewing district. The upper mountain trails are eerily crowd-free.</p>
+          <div class="hood-tags">
+            <span class="pill pill-temple">Shrine</span>
+            <span class="pill pill-food">Sake</span>
+            <span class="pill pill-nature">Hiking</span>
+          </div>
+        </div>
+      </div>
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=700&q=80" alt="Philosopher's Path" />
+        <div class="hood-body">
+          <div class="hood-name">Higashiyama</div>
+          <div class="hood-jp">The Stone Path</div>
+          <p class="hood-desc">A preserved 2km stone-paved path past craft shops, tea houses, and Kiyomizudera temple. The best single walk in Kyoto, any season.</p>
+          <div class="hood-tags">
+            <span class="pill pill-art">Crafts</span>
+            <span class="pill pill-temple">Temples</span>
+          </div>
+        </div>
+      </div>
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1504109586057-7a2ae83d1338?w=700&q=80" alt="Nishiki Market Kyoto" />
+        <div class="hood-body">
+          <div class="hood-name">Nishiki</div>
+          <div class="hood-jp">Kyoto's Kitchen</div>
+          <p class="hood-desc">A narrow covered market running five blocks — 100+ stalls of pickled plum, fresh tofu, grilled skewers, and green tea everything. Don't eat beforehand.</p>
+          <div class="hood-tags">
+            <span class="pill pill-food">Street Food</span>
+            <span class="pill pill-food">Market</span>
+          </div>
+        </div>
+      </div>
+      <div class="hood-card">
+        <img class="hood-img" src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=700&q=80" alt="Kyoto traditional" />
+        <div class="hood-body">
+          <div class="hood-name">Pontocho</div>
+          <div class="hood-jp">The Hidden Alley</div>
+          <p class="hood-desc">A lane so narrow two people can barely pass. Every door opens to a restaurant — yakitori smoke rising, paper lanterns glowing. Best discovered hungry.</p>
+          <div class="hood-tags">
+            <span class="pill pill-food">Dining</span>
+            <span class="pill pill-art">Atmosphere</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO MOSAIC -->
+<div style="padding: 0 52px; max-width: 1280px; margin: 0 auto 80px;">
+  <div class="mosaic">
+    <div class="mosaic-item">
+      <img class="mosaic-img" src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&q=80" alt="Kyoto temple" />
+    </div>
+    <div class="mosaic-item">
+      <img class="mosaic-img" src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=500&q=80" alt="Gion street" />
+    </div>
+    <div class="mosaic-item">
+      <img class="mosaic-img" src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=500&q=80" alt="Bamboo grove" />
+    </div>
+    <div class="mosaic-item">
+      <img class="mosaic-img" src="https://images.unsplash.com/photo-1551801841-ecad875a5142?w=500&q=80" alt="Torii gates" />
+    </div>
+    <div class="mosaic-item">
+      <img class="mosaic-img" src="https://images.unsplash.com/photo-1524413840807-0c3cb6fa808d?w=500&q=80" alt="Philosopher's walk" />
+    </div>
+  </div>
+</div>
+
+<!-- ITINERARY (SIGNATURE ELEMENT) -->
+<section id="itinerary" class="itinerary-section">
+  <div class="itinerary-wrap">
+    <div class="itinerary-header">
+      <p class="eyebrow">Curated for first-timers</p>
+      <h2 class="section-heading">3-Day<br/><strong style="color:var(--paper);">Itinerary</strong></h2>
+      <p class="section-lead">A realistic, walking-friendly plan. Each day has a geographic logic — you won't spend your trip on a bus.</p>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="day1">Day 1 — East & Old Town</button>
+      <button class="tab-btn" data-tab="day2">Day 2 — Gates & Bamboo</button>
+      <button class="tab-btn" data-tab="day3">Day 3 — Slow Kyoto</button>
+    </div>
+
+    <!-- DAY 1 -->
+    <div class="tab-content active" id="day1">
+      <div class="itinerary-stop">
+        <div class="stop-time">7:30 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Kiyomizudera Temple</div>
+          <div class="stop-desc">Arrive before the souvenir shops open. The wooden stage extending over the forested hillside is worth the early alarm. Free entry to the grounds, ¥500 for the main hall.</div>
+          <span class="pill pill-temple">Temple</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">9:30 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Sannenzaka & Ninenzaka</div>
+          <div class="stop-desc">Walk downhill through these stone-paved lanes — antique shops and ceramics studios — while the light is still soft. Stop for a matcha soft-serve.</div>
+          <span class="pill pill-art">Crafts</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">11:00 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Nishiki Market</div>
+          <div class="stop-desc">Kyoto's five-block covered food market. Graze your way through — grilled squid, pickled ginger, warm yuba (tofu skin), and chewy mochi.</div>
+          <span class="pill pill-food">Street Food</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">2:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Gion District Walk</div>
+          <div class="stop-desc">Wander Hanamikoji-dori on foot. Peek into the Ichiriki Chaya teahouse gate and walk the back lanes of Shimbashi — arguably the most photogenic street in Japan.</div>
+          <span class="pill pill-art">Culture</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">5:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Yasaka Shrine</div>
+          <div class="stop-desc">Free to enter and spectacular at dusk when the stone lanterns are lit. The pagoda from here looking into Higashiyama is one of Kyoto's great views.</div>
+          <span class="pill pill-temple">Shrine</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">7:30 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Dinner in Pontocho</div>
+          <div class="stop-desc">Walk the narrow alley and choose by smell and atmosphere. In summer, many restaurants open hanamizake riverside terraces over the Kamogawa — book ahead.</div>
+          <span class="pill pill-food">Dining</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="tab-content" id="day2">
+      <div class="itinerary-stop">
+        <div class="stop-time">6:30 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Fushimi Inari Taisha</div>
+          <div class="stop-desc">The famous 10,000 torii gates. Walk past the first hour of tourists all the way to the summit — it gets wilder and more atmospheric the higher you go. Total loop: 2–3 hours.</div>
+          <span class="pill pill-temple">Shrine</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">10:30 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Sake Breweries, Fushimi</div>
+          <div class="stop-desc">The Gekkeikan Okura Sake Museum is a five-minute walk. Tasting cup included in the ¥600 entry. The canal streets out front are quietly beautiful.</div>
+          <span class="pill pill-food">Sake</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">2:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Arashiyama Bamboo Grove</div>
+          <div class="stop-desc">Take the Sagano Romantic Train from Saga-Arashiyama. The bamboo grove is a five-minute walk from the station. Go left where the path forks — far fewer people.</div>
+          <span class="pill pill-nature">Nature</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">3:30 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Tenryu-ji Garden</div>
+          <div class="stop-desc">One of Kyoto's finest Zen gardens, with the Arashiyama mountains as a borrowed backdrop. The garden path to the bamboo grove is worth the extra ¥300.</div>
+          <span class="pill pill-temple">Temple</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">5:30 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Boat Ride on the Oi River</div>
+          <div class="stop-desc">Rent a rowboat for ¥1,500/hour at the boathouse near Togetsukyo Bridge. Evening light on the river and hills is genuinely stunning.</div>
+          <span class="pill pill-nature">Outdoors</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">7:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Tofu Kaiseki Dinner</div>
+          <div class="stop-desc">Arashiyama is known for its yudofu (hot tofu) restaurants. Shoraian, perched over the river, is worth booking two days in advance.</div>
+          <span class="pill pill-food">Kaiseki</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="tab-content" id="day3">
+      <div class="itinerary-stop">
+        <div class="stop-time">8:00 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Philosopher's Path</div>
+          <div class="stop-desc">A 2km canal walk under cherry trees (spectacular in April). Start from Nanzenji and walk north. The path earns its name — it invites slow, quiet movement.</div>
+          <span class="pill pill-nature">Walk</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">10:00 am</div>
+        <div class="stop-body">
+          <div class="stop-name">Nanzenji Temple</div>
+          <div class="stop-desc">The huge sanmon gate offers a panorama of the city treetops. The aqueduct running through the temple grounds is a peculiar and wonderful anachronism.</div>
+          <span class="pill pill-temple">Temple</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">12:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Nishiki Lunch, Slow Walk</div>
+          <div class="stop-desc">Return to Nishiki or try a neighbourhood soba shop. Take the afternoon with no agenda — Kyoto reveals itself when you stop trying to see everything.</div>
+          <span class="pill pill-food">Lunch</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">2:30 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Nijo Castle</div>
+          <div class="stop-desc">The shogun's opulent Kyoto residence. The "nightingale floors" squeak deliberately — a clever alarm system. The inner chambers feel genuinely untouched.</div>
+          <span class="pill pill-art">History</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">5:00 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Tea Ceremony</div>
+          <div class="stop-desc">Book a 45-minute ceremony at En tea house in Higashiyama — small, unhurried, and conducted entirely in the spirit of wabi-sabi. No tea experience needed.</div>
+          <span class="pill pill-art">Experience</span>
+        </div>
+      </div>
+      <div class="itinerary-stop">
+        <div class="stop-time">7:30 pm</div>
+        <div class="stop-body">
+          <div class="stop-name">Last Night in Gion</div>
+          <div class="stop-desc">An izakaya dinner — grilled skewers, cold Sapporo, and whatever the chef recommends. Gion Hitomi on Shijo is a local favourite that doesn't require a reservation.</div>
+          <span class="pill pill-food">Izakaya</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOD -->
+<section id="food" class="eats-section">
+  <div class="section-wrap" style="max-width:1280px;">
+    <p class="eyebrow">Eat like a local</p>
+    <h2 class="section-heading">Kyoto's<br/><strong>Essential Dishes</strong></h2>
+    <p class="section-lead">Kyoto cuisine (kyo-ryori) is subtle, vegetable-forward, and built around the tea ceremony aesthetic. These are the things you must eat.</p>
+
+    <div class="eats-grid">
+      <div class="eat-card">
+        <div class="eat-emoji">🍜</div>
+        <div>
+          <div class="eat-name">Ramen Kyoto-style</div>
+          <div class="eat-jp">Rich chicken broth, thin noodles</div>
+          <p class="eat-desc">Distinct from Tokyo or Sapporo ramen — Kyoto's version uses a dark soy-chicken broth with thin straight noodles and a generous amount of spring onion. Warmer, darker, more savoury.</p>
+          <div class="eat-where">Try it at: <span>Honke Daiichiasahi, near Kyoto Station</span></div>
+        </div>
+      </div>
+      <div class="eat-card">
+        <div class="eat-emoji">🥢</div>
+        <div>
+          <div class="eat-name">Kaiseki</div>
+          <div class="eat-jp">The art of the multi-course meal</div>
+          <p class="eat-desc">The apex of Japanese cuisine: a seasonal, multi-course progression of tiny, precise dishes. Even a lunch kaiseki (¥3,000–¥6,000) will rearrange your understanding of what food can be.</p>
+          <div class="eat-where">Try it at: <span>Kikunoi Honten or Nakamura in Gion</span></div>
+        </div>
+      </div>
+      <div class="eat-card">
+        <div class="eat-emoji">🫘</div>
+        <div>
+          <div class="eat-name">Yudofu</div>
+          <div class="eat-jp">Hot tofu in dashi broth</div>
+          <p class="eat-desc">Kyoto's most iconic vegetarian dish — silken tofu simmered gently in kombu dashi, served with small dipping condiments. Deceptively simple. Deeply satisfying.</p>
+          <div class="eat-where">Try it at: <span>Tousuiro, near Nijo Castle</span></div>
+        </div>
+      </div>
+      <div class="eat-card">
+        <div class="eat-emoji">🍡</div>
+        <div>
+          <div class="eat-name">Mitarashi Dango</div>
+          <div class="eat-jp">Sweet soy-glazed rice dumplings</div>
+          <p class="eat-desc">Skewered glutinous rice balls basted in a sweet-salty soy caramel sauce. Originally offered at Shimogamo Shrine, they're now sold all over the city and are the perfect walking snack.</p>
+          <div class="eat-where">Try it at: <span>Kamo Mitarashi Chaya, Shimogamo</span></div>
+        </div>
+      </div>
+      <div class="eat-card">
+        <div class="eat-emoji">🍵</div>
+        <div>
+          <div class="eat-name">Matcha Everything</div>
+          <div class="eat-jp">The defining flavour of Kyoto</div>
+          <p class="eat-desc">Soft-serve, cake, noodles, beer — Kyoto puts matcha in things you wouldn't expect and pulls it off. The Ippodo Tea shop near the Imperial Palace is the best place to buy it to take home.</p>
+          <div class="eat-where">Try it at: <span>Tsujiri Honten, Gion or Nakamura Tokichi</span></div>
+        </div>
+      </div>
+      <div class="eat-card">
+        <div class="eat-emoji">🍱</div>
+        <div>
+          <div class="eat-name">Obanzai</div>
+          <div class="eat-jp">Kyoto's home cooking tradition</div>
+          <p class="eat-desc">Small shared plates of seasonal vegetables, pickles, and fish — the everyday counterpart to kaiseki's formality. Found in neighbourhood shokudo and depachika basement food halls.</p>
+          <div class="eat-where">Try it at: <span>Izuju in Gion or Nishiki Market stalls</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICAL -->
+<section id="practical">
+  <div class="section-wrap">
+    <p class="eyebrow">Plan your visit</p>
+    <h2 class="section-heading">Good to<br/><strong>Know</strong></h2>
+    <p class="section-lead">The things that save time, money, and embarrassment. Kyoto rewards preparation — here's the short version.</p>
+
+    <div class="practical-grid">
+      <div class="practical-card">
+        <div class="practical-icon">🚌</div>
+        <div class="practical-title">Getting Around</div>
+        <p class="practical-text">The bus network covers nearly everything. A <strong>¥700 day pass</strong> is excellent value. IC cards (Suica/Pasmo) work on all buses and the subway. Cycling is ideal in flat central Kyoto — rentals from ¥800/day.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">💴</div>
+        <div class="practical-title">Money & Payments</div>
+        <p class="practical-text">Carry <strong>cash</strong> — many temples, small restaurants, and traditional shops are cash-only. 7-Eleven and Japan Post ATMs reliably accept foreign cards. Budget ¥8,000–¥15,000/day for mid-range travel.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">🙏</div>
+        <div class="practical-title">Temple Etiquette</div>
+        <p class="practical-text">Remove shoes when indicated. Don't photograph inside main halls unless signs allow it. At shrines, bow twice, clap twice, make your wish, bow once. <strong>Never touch</strong> ritual objects.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">📶</div>
+        <div class="practical-title">Connectivity</div>
+        <p class="practical-text">Buy a <strong>pocket WiFi</strong> or data SIM at the airport (IIJmio, HISMobile). Google Maps works reliably. Download the Navitime Japan app as backup — it handles train changes better.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">🏨</div>
+        <div class="practical-title">Where to Stay</div>
+        <p class="practical-text">Gion for atmosphere. Near Kyoto Station for convenience. Try a <strong>machiya guesthouse</strong> (restored townhouse) for one night — the experience is worth the price premium. Book 3+ months ahead for peak season.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">🌸</div>
+        <div class="practical-title">Peak Season</div>
+        <p class="practical-text">Cherry blossom (late March–April) and autumn foliage (November) are spectacular but <strong>extremely crowded</strong>. Book accommodation 6 months ahead. Shoulder months — June, September — offer space and lower prices.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">🗺️</div>
+        <div class="practical-title">Day Trips</div>
+        <p class="practical-text"><strong>Nara</strong> (45 min) for deer and Todai-ji. <strong>Osaka</strong> (15 min on Shinkansen) for street food and nightlife. <strong>Hiroshima + Miyajima</strong> (90 min) is a full day but worth it.</p>
+      </div>
+      <div class="practical-card">
+        <div class="practical-icon">🌡️</div>
+        <div class="practical-title">What to Pack</div>
+        <p class="practical-text">Comfortable <strong>walking shoes</strong> — you'll cover 15–20km/day easily. Lightweight layers for temple visits. A small day bag. Summers are hot and humid; winters are cold but rarely icy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<div class="newsletter">
+  <p class="eyebrow" style="color:var(--gold);">Stay in the loop</p>
+  <h2 class="section-heading">Travel notes<br/><strong>from Kyoto</strong></h2>
+  <p>Seasonal guides, hidden spots, and new restaurant finds — once a month, never more.</p>
+  <div class="nl-form">
+    <input class="nl-input" type="email" placeholder="Your email address" />
+    <button class="nl-btn">Subscribe</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-jp">Kyoto</div>
+      <div class="footer-brand-en">Kyoto Guide</div>
+      <p class="footer-tagline">An independent traveller's guide to one of the world's most beautiful cities.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#neighborhoods">Neighborhoods</a></li>
+        <li><a href="#itinerary">3-Day Itinerary</a></li>
+        <li><a href="#food">Food Guide</a></li>
+        <li><a href="#practical">Travel Tips</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Districts</h4>
+      <ul>
+        <li><a href="#neighborhoods">Gion</a></li>
+        <li><a href="#neighborhoods">Arashiyama</a></li>
+        <li><a href="#neighborhoods">Fushimi</a></li>
+        <li><a href="#neighborhoods">Higashiyama</a></li>
+        <li><a href="#neighborhoods">Pontocho</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Temple Map (PDF)</a></li>
+        <li><a href="#">Bus Route Guide</a></li>
+        <li><a href="#">Seasonal Calendar</a></li>
+        <li><a href="#">Phrase Guide</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Kyoto Guide · An independent travel resource</span>
+    <span>Made with care for curious travellers</span>
+  </div>
+</footer>
+
+<script>
+  // Sticky nav
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Tab switcher
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Newsletter mock submit
+  document.querySelector('.nl-btn').addEventListener('click', () => {
+    const input = document.querySelector('.nl-input');
+    if (input.value.includes('@')) {
+      input.value = '';
+      input.placeholder = 'You\'re in — check your inbox ✓';
+      input.style.color = 'var(--moss)';
+    }
+  });
+</script>
+</body>
+</html>
